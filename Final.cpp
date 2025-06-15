@@ -324,7 +324,7 @@ public:
     int getDifficulty() const{return difficulty;}
     int getUserOwner() const{return userOwner;};
     system_clock::time_point getNextReviewSession() {return NextReviewSession;}
-    int getAchievemnt() const{return achievement;}
+    int getAchievement() const{return achievement;}
 
      //function to update difficulty of question between 1-5(lower being easier and vice versa)
     void updateDifficulty(bool correct)
@@ -346,19 +346,19 @@ public:
         switch(difficulty)
         {
             case 1:
-            intervalseconds=180;
-            break;
-
-            case 2:
             intervalseconds=60;
             break;
 
+            case 2:
+            intervalseconds=30;
+            break;
+
             case 3:
-            intervalseconds=45;
+            intervalseconds=20;
             break;
 
             case 4:
-            intervalseconds= 30;
+            intervalseconds= 15;
             break;
 
             case 5:
@@ -499,6 +499,34 @@ private:
         cout<<"Press Enter To Continue";
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n'); //ignores all except enter key
+    }
+
+    //Function to Show Score
+    void showScore()
+    {
+        system("cls");
+        vector<Flashcards>usercards=deck.getAllUserCards(currentUserNo);
+
+        if(usercards.size()==0)
+        {
+            cout<<"No flashcards created yet!"<<endl<<endl;
+            ReturnToMain();
+            return;
+        }
+        User *currentuser =usermanager1->getUserByIDno(currentUserNo);
+        cout<<"FlashCard Scores for Spaced Repetition:"<<endl<<endl;
+
+        for(int i=0; i<usercards.size();i++)
+        {
+            cout<<" Card "<<(i+1)<<endl;
+            cout<<"Question:"<<usercards[i].getQues()<<endl;
+            cout<<"Answer:"<<usercards[i].getAns()<<endl;
+            cout<<"Difficulty Level:"<<usercards[i].getDifficulty()<<endl;
+            cout<<"Achievement Score :"<<usercards[i].getAchievement()<<endl<<endl;
+
+        }
+        ReturnToMain();
+
     }
 
     //Function to Start Spaced Repetition Session
@@ -815,7 +843,8 @@ public:
             cout<< "2) Spaced repetition review (due cards only)" << endl;
             cout<< "3) Normal flashcard review (all cards)" << endl;
             cout<< "4) Switch user profile" << endl;
-            cout<< "5) Save and Exit" << endl;
+            cout<< "5) View Statistics for Each Card in Spaced Repetition"<<endl;
+            cout<< "6) Save and Exit" << endl;
             cout<< "Selected Choice:";
             cin >> choice;
             cin.ignore();
@@ -838,7 +867,8 @@ public:
                         }
                         break;
                     }
-                case 5:
+                case 5: showScore();break;
+                case 6:
                     saveData();
                     cout<<"Exiting Program!"<<endl;
                     break;
@@ -847,7 +877,7 @@ public:
                     ReturnToMain();
             }
 
-        } while (choice != 5);                 // Continue until user chooses to exit
+        } while (choice != 6);                 // Continue until user chooses to exit
     }
 };
 
